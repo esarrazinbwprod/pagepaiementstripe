@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement tap to pay avec Stripe</title>
+</head>
+<body>
+    <h1>Paiement tap to pay avec Stripe</h1>
+    <button id="tapToPayButton">Paiement tap to pay</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('pk_live_51M1sCJIEmVMB9ZOsVqiJMBpJYp576Ac6SqhDVUPzkIMzYgFIu0ZDk21gnZcmJ8l1EBxJVmvuOyjH8p4NUOxVprlT00ygZSI8b6');
+
+        document.getElementById('tapToPayButton').addEventListener('click', function() {
+            // Créez une instance de Terminal
+            var terminal = stripe.terminal();
+
+            // Démarrez la session de paiement
+            terminal.setReader('auto').then(function() {
+                return terminal.collectPaymentMethod('tap');
+            }).then(function(result) {
+                if (result.error) {
+                    console.error(result.error);
+                    alert("Une erreur est survenue lors du paiement. Veuillez réessayer.");
+                } else {
+                    // Traitez le paiement sur votre serveur
+                    // Envoyez le token de paiement result.paymentMethod.id à votre serveur pour finaliser le paiement
+                    alert("Paiement réussi !");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
